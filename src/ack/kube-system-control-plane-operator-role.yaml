@@ -1,0 +1,33 @@
+apiVersion: iam.services.k8s.aws/v1alpha1
+kind: Role
+metadata:
+  name: rhpds-capi-3-kube-system-control-plane-operator 
+spec:
+  name: rhpds-capi-3-kube-system-control-plane-operator
+  description: rhpds-capi-3-kube-system-control-plane-operator
+  maxSessionDuration: 3600
+  assumeRolePolicyDocument: >
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "Federated": "arn:aws:iam::...:oidc-provider/oidc..../..."
+          },
+          "Action": "sts:AssumeRoleWithWebIdentity",
+          "Condition": {
+            "StringEquals": {
+                "oidc.../....:sub": "system:serviceaccount:kube-system:control-plane-operator"
+            }
+          }
+        }
+      ]
+    }
+  policies:
+    - arn:aws:iam::aws:policy/service-role/ROSAControlPlaneOperatorPolicy
+  tags:
+    - key: operator_name
+      value: "control-plane-operator"
+    - key: rosa_hcp_policies
+      value: "true"
