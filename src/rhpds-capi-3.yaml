@@ -1,0 +1,58 @@
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: "rhpds-capi-3"
+spec:
+  clusterNetwork:
+    pods:
+      cidrBlocks: ["10.128.0.0/14"]
+  infrastructureRef:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+    kind: ROSACluster
+    name: "rhpds-capi-3"
+  controlPlaneRef:
+    apiVersion: controlplane.cluster.x-k8s.io/v1beta2
+    kind: ROSAControlPlane
+    name: "rhpds-capi-3-control-plane"
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+kind: ROSACluster
+metadata:
+  name: "rhpds-capi-3"
+spec: {}
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1beta2
+kind: ROSAControlPlane
+metadata:
+  name: "rhpds-capi-3-control-plane"
+spec:
+  rosaClusterName: "rhpds-capi-3"
+  billingAccount: "..."
+  version: "4.15.0"
+  region: "us-east-3"
+  oidcID: "..."
+  endpointAccess: Private
+  network:
+    networkType: Other
+  subnets:
+    - "..."
+    - "..."
+  availabilityZones:
+    - "us-east-3"
+  additionalTags:
+    "rosa-capi-demo/cluster-name": "rhpds-capi-3"
+  credentialsSecretRef:
+    name: rosa-creds-secret
+  rolesRef:
+    ingressARN: "..."
+    imageRegistryARN: "..."
+    storageARN: "..."
+    networkARN: "..."
+    kubeCloudControllerARN: "..."
+    nodePoolManagementARN: "..."
+    controlPlaneOperatorARN: "..."
+    kmsProviderARN: "..."
+  installerRoleARN: "..."
+  supportRoleARN: "..."
+  workerRoleARN: "..."
